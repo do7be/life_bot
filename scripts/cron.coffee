@@ -14,14 +14,14 @@ module.exports = (robot) ->
     robot.send {room: room}, message
 
   # morning message
-  new cron '0 0 8 * * *', () =>
+  new cron '0 0 8 * * *', () ->
     Task.morning(robot)
     Task.weather(robot)
     Task.hatena(robot)
   , null, true, "Asia/Tokyo"
 
   # night messege
-  new cron '0 0 23 * * *', () =>
+  new cron '0 0 23 * * *', () ->
     Task.garbage(robot)
   , null, true, "Asia/Tokyo"
 
@@ -41,7 +41,7 @@ Task = {
         if err
           emitter.emit 'send', robot, "sorry. weather disable.\n"
         resData = JSON.parse body
-        icon = resData.icon_url.replace(/\\/g, "");
+        icon = resData.icon_url.replace(/\\/g, "")
         emitter.emit 'send', robot, "【天気】#{resData.text}\n#{icon}\n\n"
   garbage: (robot) ->
     weekday = moment().utcOffset("+24:00").format("dddd")
