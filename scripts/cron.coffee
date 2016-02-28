@@ -1,3 +1,5 @@
+# Description:
+#   slack bot for me
 cron = require('cron').CronJob
 {EventEmitter} = require 'events'
 emitter = new EventEmitter
