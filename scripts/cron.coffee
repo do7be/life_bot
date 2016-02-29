@@ -9,7 +9,7 @@ moment.locale('ja', {
 })
 config = require("./config")
 room = config.room
-wether = config.url.weather
+weather = config.url.weather
 
 module.exports = (robot) ->
   emitter.on 'send', (robot, message) ->
