@@ -44,7 +44,7 @@ Task = {
           emitter.emit 'send', robot, "sorry. weather disable.\n"
         resData = JSON.parse body
         icon = resData.icon_url.replace(/\\/g, "")
-        emitter.emit 'send', robot, "【天気】#{resData.text}\n#{icon}\n\n"
+        emitter.emit 'send', robot, "【天気】\n#{resData.text}\n#{icon}\n\n#{resData.description}\n\n"
   garbage: (robot) ->
     weekday = moment().utcOffset("+24:00").format("dddd")
     if config.garbage[weekday]?
