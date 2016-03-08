@@ -40,8 +40,6 @@ Task = {
       .get() (err, res, body) ->
         if err
           emitter.emit 'send', robot, "sorry. weather disable.\n"
-        body = JSON.parse body
-        body = body.replace(/\n/g, '')
         resData = JSON.parse body
 
         icon = resData.forecasts[0].image.url
