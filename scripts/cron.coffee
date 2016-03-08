@@ -34,17 +34,27 @@ Task = {
   hatena: (robot) ->
     emitter.emit 'send', robot, "【はてブ】\nテクノロジー\nhttp://b.hatena.ne.jp/ctop/it\nマイホットエントリー\nhttp://b.hatena.ne.jp/do7be/hotentry\n関心ワード\nhttp://b.hatena.ne.jp/do7be/interest\n\n"
   weather: (robot) ->
-    data = JSON.stringify({
-      text: '天気 今日 東京'
-    })
+    query = {city: '東京'};
     robot.http(weather)
-      .header('Content-Type', 'application/json')
-      .post(data) (err, res, body) ->
+      .query(query)
+      .get() (err, res, body) ->
         if err
           emitter.emit 'send', robot, "sorry. weather disable.\n"
+        body = JSON.parse body
+        body = body.replace(/\n/g, '')
         resData = JSON.parse body
-        icon = resData.icon_url.replace(/\\/g, "")
-        emitter.emit 'send', robot, "【天気】\n#{resData.text}\n#{icon}\n\n#{resData.description}\n\n"
+
+        icon = resData.forecasts[0].image.url
+        location = resData.location.city
+        temp_max = '?'
+        temp_min = '?'
+        if resData.forecasts[0].temperature.max?
+          temp_max = resData.forecasts[0].temperature.max.celcius
+        if resData.forecasts[0].temperature.min?
+          temp_min = resData.forecasts[0].temperature.min.celcius
+        telop = resData.forecasts[0].telop
+        text = "#{location}の天気\n#{telop} #{temp_max}℃/#{temp_min}℃"
+        emitter.emit 'send', robot, "【天気】\n#{text}\n#{icon}\n\n#{resData.description.text}\n\n"
   garbage: (robot) ->
     weekday = moment().utcOffset("+24:00").format("dddd")
     if config.garbage[weekday]?
