@@ -29,7 +29,7 @@ module.exports = (robot) ->
 
 Task = {
   morning: (robot) ->
-    today = moment().format("MM/DD(ddd)")
+    today = moment().tz("Asia/Tokyo").format("MM/DD(ddd)")
     emitter.emit 'send', robot, ":sunny::sunny::sunny::sunny::sunny:\n:sunglasses: < おはようございます！\n今日は#{today}です。\n\n"
   hatena: (robot) ->
     emitter.emit 'send', robot, "【はてブ】\nテクノロジー\nhttp://b.hatena.ne.jp/ctop/it\nマイホットエントリー\nhttp://b.hatena.ne.jp/do7be/hotentry\n関心ワード\nhttp://b.hatena.ne.jp/do7be/interest\n\n"
@@ -53,11 +53,12 @@ Task = {
         if resData.forecasts[0].temperature.min?
           temp_min = resData.forecasts[0].temperature.min.celcius
         telop = resData.forecasts[0].telop
-        text = "#{location}の天気\n#{telop} #{temp_max}℃/#{temp_min}℃"
+        today = moment().tz("Asia/Tokyo").format("MM/DD(ddd)")
+        text = "#{today} #{location}の天気\n#{telop} #{temp_max}℃/#{temp_min}℃"
         emitter.emit 'send', robot, "【天気】\n#{text}\n#{icon}\n\n#{resData.description.text}\n\n"
   garbage: (robot) ->
-    weekday = moment().utcOffset("+24:00").format("dddd")
+    weekday = moment().tz("Asia/Tokyo").utcOffset("+24:00").format("dddd")
     if config.garbage[weekday]?
-      weekdayJa = moment().utcOffset("+24:00").format("ddd")
+      weekdayJa = moment().tz("Asia/Tokyo").utcOffset("+24:00").format("ddd")
       emitter.emit 'send', robot, ":crescent_moon::crescent_moon::crescent_moon::crescent_moon::crescent_moon:\n:sleeping: < 明日は#{weekdayJa}曜日なので#{config.garbage[weekday]}の日です。\n捨て忘れないようにしましょう。\n\n"
 }
